@@ -1,0 +1,30 @@
+version: '3'
+services:
+  satisfactory-server:
+    container_name: SATISFACTORY
+    hostname: 'satisfactory-server'
+    image: 'wolveix/satisfactory-server:latest'
+    ports:
+        - '7777:7777/udp'
+        - '15000:15000/udp'
+        - '15777:15777/udp'
+    volumes:
+        - 'satisfactory:/config'
+    environment:
+        - MAXPLAYERS=4
+        - PGID=1000
+        - PUID=1000
+        - STEAMBETA=false
+        - AUTOSAVEINTERVAL=600
+    restart: unless-stopped
+
+  dropbox:
+    image: rbonghi/dropbox:latest
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DROPBOX_TOKEN=${DROPBOXTOKEN}
+    volumes:
+      - satisfactory:/dropbox
+
+volumes:
+  satisfactory:
